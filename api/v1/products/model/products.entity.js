@@ -29,8 +29,8 @@ Product.init(
     },
     image: {
       type: DataTypes.STRING(255),
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     sequelize: db,
