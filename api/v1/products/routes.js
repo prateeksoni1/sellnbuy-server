@@ -1,7 +1,7 @@
+const router = require('express').Router();
+
 const { checkAuthStatus } = require('../users/controllers');
 const { getProducts, addProduct } = require('./controllers');
-
-const router = require('express').Router();
 
 router.get('/', checkAuthStatus, getProducts);
 

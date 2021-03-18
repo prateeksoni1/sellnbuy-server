@@ -13,7 +13,9 @@ exports.getUsers = async (req, res) => {
 
 exports.register = async (req, res) => {
   const { name, contact, email, password, userType } = req.body;
-  const existingUser = await User.findOne({ where: { email } });
+  const existingUser = await User.findOne({
+    where: { email },
+  });
 
   if (existingUser) {
     return res.status(409).json({
@@ -22,7 +24,9 @@ exports.register = async (req, res) => {
     });
   }
 
-  const hashedPassword = await argon2.hash(password, { saltLength: 12 });
+  const hashedPassword = await argon2.hash(password, {
+    saltLength: 12,
+  });
 
   const user = await User.create({
     name,
@@ -41,7 +45,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const existingUser = await User.findOne({ where: { email } });
+  const existingUser = await User.findOne({
+    where: { email },
+  });
 
   if (!existingUser) {
     return res.json({
@@ -70,8 +76,7 @@ exports.login = async (req, res) => {
 };
 
 exports.checkAuthStatus = async (req, res, next) => {
-  console.log(req.headers);
-  let { authorization } = req.headers; // Bearer token
+  const { authorization } = req.headers; // Bearer token
   if (!authorization) {
     return res.status(401).json({
       ok: false,
@@ -91,11 +96,11 @@ exports.checkAuthStatus = async (req, res, next) => {
 
   req.user = await User.findByPk(data.id);
 
-  next();
+  return next();
 };
 
 exports.isAuthenticated = (req, res) => {
-  let { Authorization } = req.headers; // Bearer token
+  const { Authorization } = req.headers; // Bearer token
   const token = Authorization.split(' ')[1];
 
   const isValid = jwt.verify(token, process.env.JWT_SECRET);

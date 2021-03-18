@@ -17,7 +17,7 @@ Cart.init(
   {
     sequelize: db,
     timestamps: true,
-  }
+  },
 );
 Cart.belongsTo(User, { foreignKey: 'userId' });
 module.exports = Cart;
