@@ -3,7 +3,8 @@ const router = require("express").Router();
 
 const Product = require("./model/products.entity");
 
-router.route("/")
+router
+.route("/")
 .get(async (req, res) => {
     const products = await Product.findAll();
 
@@ -13,12 +14,12 @@ router.route("/")
     });
   })
   .post(async (req, res) => {
-    const { name, price, category, owner_id } = req.body;
+    const { name, price, category, ownerId } = req.body;
 
     const product = await Product.create({
       name,
       price,
-      owner_id,
+      ownerId,
       category,
     });
 

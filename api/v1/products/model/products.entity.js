@@ -36,4 +36,4 @@ Product.init(
 
 Product.belongsTo(User, { foreignKey: 'ownerId' });
 
-module.exports = User;
+module.exports = Product;
