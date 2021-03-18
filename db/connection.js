@@ -13,6 +13,8 @@ const connectDb = async () => {
   // require('../api/v1/users/model/users.entity');
   // require('../api/v1/cart/model/cart.entity');
   // require('../api/v1/products/model/products.entity');
+  // require('../api/v1/orderhistory/model/orderhistory.entity');
+  // require('../api/v1/orders/model/orders.entity');
 
   // sequelize.sync({ force: true });
 };
