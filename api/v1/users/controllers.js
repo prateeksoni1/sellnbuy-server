@@ -93,3 +93,21 @@ exports.checkAuthStatus = async (req, res, next) => {
 
   next();
 };
+
+exports.isAuthenticated = (req, res) => {
+  let { Authorization } = req.headers; // Bearer token
+  const token = Authorization.split(' ')[1];
+
+  const isValid = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (!isValid) {
+    return res.status(401).json({
+      ok: false,
+      message: 'Invalid token',
+    });
+  }
+
+  return res.json({
+    ok: true,
+  });
+};
