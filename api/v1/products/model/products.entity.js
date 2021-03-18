@@ -35,7 +35,7 @@ Product.init(
   {
     sequelize: db,
     timestamps: true,
-  }
+  },
 );
 
 Product.belongsTo(User, { foreignKey: 'ownerId' });

@@ -35,7 +35,7 @@ User.init(
   {
     sequelize: db,
     timestamps: true,
-  }
+  },
 );
 
 module.exports = User;

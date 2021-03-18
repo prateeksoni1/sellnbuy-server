@@ -1,9 +1,5 @@
-const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
-
-const { getUsers, register, login, isAuthenticated } = require('./controllers');
-const User = require('./model/users.entity');
 const router = require('express').Router();
+const { getUsers, register, login, isAuthenticated } = require('./controllers');
 
 router.route('/').get(getUsers).post(register);
 

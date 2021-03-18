@@ -27,7 +27,7 @@ Orders.init(
   {
     sequelize: db,
     timestamps: true,
-  }
+  },
 );
 Orders.belongsTo(Product, { foreignKey: 'productId' });
 Orders.belongsTo(Cart, { foreignKey: 'cartId' });
