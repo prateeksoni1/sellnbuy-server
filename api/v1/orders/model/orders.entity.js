@@ -19,6 +19,10 @@ Orders.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    isPurchased: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     sequelize: db,

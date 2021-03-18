@@ -12,7 +12,7 @@ Product.init(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     price: {
@@ -27,6 +27,10 @@ Product.init(
       type: DataTypes.ENUM('a', 'b'),
       allowNull: false,
     },
+    image: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    }
   },
   {
     sequelize: db,
