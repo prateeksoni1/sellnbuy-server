@@ -1,7 +1,7 @@
-const { Model, DataTypes } = require("sequelize");
-const db = require("../../../../db");
-const Cart = require("../../users/model/cart.entity");
-const Products = require("../../users/model/products.entity");
+const { Model, DataTypes } = require('sequelize');
+const db = require('../../../../db');
+const Cart = require('../../cart/model/cart.entity');
+const Product = require('../../products/model/products.entity');
 
 class Orders extends Model {}
 Orders.init(
@@ -25,7 +25,7 @@ Orders.init(
     timestamps: true,
   }
 );
-Orders.belongsTo(Product, { foreignKey: "productId" });
-Orders.belongsTo(Cart, { foreignKey: "cartId" });
+Orders.belongsTo(Product, { foreignKey: 'productId' });
+Orders.belongsTo(Cart, { foreignKey: 'cartId' });
 
 module.exports = Orders;

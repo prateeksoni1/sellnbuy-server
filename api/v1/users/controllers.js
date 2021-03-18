@@ -111,3 +111,29 @@ exports.isAuthenticated = (req, res) => {
     ok: true,
   });
 };
+
+exports.isAdmin = (req, res, next) => {
+  const { user } = req;
+
+  if (user.userType === 'admin') {
+    next();
+  }
+
+  return res.status(401).json({
+    ok: false,
+    message: 'Only admin can access this route',
+  });
+};
+
+exports.isUser = (req, res, next) => {
+  const { user } = req;
+
+  if (user.userType === 'user') {
+    next();
+  }
+
+  return res.status(401).json({
+    ok: false,
+    message: 'Only user can access this route',
+  });
+};
