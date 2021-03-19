@@ -1,4 +1,3 @@
-const { default: axios } = require('axios');
 const Cart = require('../cart/model/cart.entity');
 const Orders = require('./model/orders.entity');
 
