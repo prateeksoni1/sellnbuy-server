@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
   });
 
   if (!existingUser) {
-    return res.json({
+    return res.status(404).json({
       ok: false,
       message: 'No user exists',
     });
@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
   const isValid = await argon2.verify(existingUser.password, password);
 
   if (!isValid) {
-    return res.json({
+    return res.status(401).json({
       ok: false,
       message: 'Invalid Email/Password',
     });
@@ -78,7 +78,7 @@ exports.login = async (req, res) => {
 exports.checkAuthStatus = async (req, res, next) => {
   const { authorization } = req.headers; // Bearer token
   if (!authorization) {
-    return res.status(401).json({
+    return res.status(404).json({
       ok: false,
       message: 'No token provided',
     });
@@ -100,8 +100,8 @@ exports.checkAuthStatus = async (req, res, next) => {
 };
 
 exports.isAuthenticated = (req, res) => {
-  const { Authorization } = req.headers; // Bearer token
-  const token = Authorization.split(' ')[1];
+  const { authorization } = req.headers; // Bearer token
+  const token = authorization.split(' ')[1];
 
   const isValid = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -131,14 +131,21 @@ exports.isAdmin = (req, res, next) => {
 };
 
 exports.isUser = (req, res, next) => {
-  const { user } = req;
+  try {
+    const { user } = req;
 
-  if (user.userType === 'user') {
-    next();
+    console.log(user);
+
+    if (user.userType === 'user') {
+      console.log('here');
+      return next();
+    }
+
+    return res.status(401).json({
+      ok: false,
+      message: 'Only user can access this route',
+    });
+  } catch (err) {
+    console.log(err);
   }
-
-  return res.status(401).json({
-    ok: false,
-    message: 'Only user can access this route',
-  });
 };

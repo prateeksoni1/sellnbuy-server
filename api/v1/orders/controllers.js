@@ -1,3 +1,5 @@
+const { default: axios } = require('axios');
+const Cart = require('../cart/model/cart.entity');
 const Orders = require('./model/orders.entity');
 
 exports.getOrders = async (req, res) => {
@@ -10,11 +12,25 @@ exports.getOrders = async (req, res) => {
 };
 
 exports.addOrder = async (req, res) => {
-  const { productId, cartId } = req.body;
+  const { user } = req;
+
+  let cart = await Cart.findOne({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  // check this again
+  if (!cart) {
+    cart = await Cart.create({
+      userId: user.id,
+    });
+  }
+  const { productId } = req.body;
 
   const order = await Orders.create({
     productId,
-    cartId,
+    cartId: cart.id,
   });
 
   return res.status(201).json({
