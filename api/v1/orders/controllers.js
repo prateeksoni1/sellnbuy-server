@@ -12,6 +12,9 @@ exports.getOrders = async (req, res) => {
   });
 };
 
+
+
+
 exports.getOrdersForUser = async(req,res)=>{
   const {user} = req;
     const cart = await Cart.findOne({
