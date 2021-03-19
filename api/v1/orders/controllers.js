@@ -1,4 +1,5 @@
 const Cart = require('../cart/model/cart.entity');
+const Product = require('../products/model/products.entity');
 const Orders = require('./model/orders.entity');
 
 exports.getOrders = async (req, res) => {
@@ -9,6 +10,31 @@ exports.getOrders = async (req, res) => {
     orders,
   });
 };
+
+exports.getOrdersForUser = async(req,res)=>{
+  const {user} = req;
+    const cart = await Cart.findOne({
+    where: {
+      userId: user.id,
+    },
+  });
+  if(!cart){
+    return res.status(404).json({
+      ok: false,
+      message:"No cart found for the user",
+    });
+  }
+  const orders=Orders.findAll({
+    where:{
+      cartId: cart.id
+    },include:[Product]
+  })
+  return res.status(200).json({
+    ok: true,
+    orders
+  });
+ 
+}
 
 exports.addOrder = async (req, res) => {
   const { user } = req;
@@ -25,6 +51,8 @@ exports.addOrder = async (req, res) => {
       userId: user.id,
     });
   }
+
+
   const { productId } = req.body;
 
   const order = await Orders.create({
