@@ -31,6 +31,11 @@ User.init(
       type: DataTypes.ENUM('admin', 'user'),
       defaultValue: 'user',
     },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     sequelize: db,

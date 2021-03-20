@@ -54,6 +54,21 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (
+      email === process.env.SUPER_ADMIN_EMAIL &&
+      password === process.env.SUPER_ADMIN_PASSWORD
+    ) {
+      const token = jwt.sign({ superAdmin: true }, process.env.JWT_SECRET, {
+        expiresIn: '365d',
+      });
+
+      return res.json({
+        ok: true,
+        token,
+        superAdmin: true,
+      });
+    }
+
     const existingUser = await User.findOne({
       where: { email },
     });
@@ -132,6 +147,15 @@ exports.isAuthenticated = async (req, res, next) => {
       });
     }
 
+    if (data.superAdmin) {
+      req.superAdmin = true;
+
+      return res.json({
+        ok: true,
+        superAdmin: true,
+      });
+    }
+
     const user = await User.findByPk(data.id);
 
     if (!user) {
@@ -144,6 +168,21 @@ exports.isAuthenticated = async (req, res, next) => {
     return res.json({
       ok: true,
     });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.isSuperAdmin = (req, res, next) => {
+  try {
+    if (!req.superAdmin) {
+      return res.status(401).json({
+        ok: false,
+        message: 'Only superadmin can access this route',
+      });
+    }
+
+    return next();
   } catch (err) {
     return next(err);
   }
