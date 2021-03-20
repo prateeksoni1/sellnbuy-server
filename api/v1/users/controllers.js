@@ -121,6 +121,12 @@ exports.checkAuthStatus = async (req, res, next) => {
     });
   }
 
+  if (data.superAdmin) {
+    req.superAdmin = true;
+
+    return next();
+  }
+
   req.user = await User.findByPk(data.id);
 
   if (!req.user) {
@@ -148,8 +154,6 @@ exports.isAuthenticated = async (req, res, next) => {
     }
 
     if (data.superAdmin) {
-      req.superAdmin = true;
-
       return res.json({
         ok: true,
         superAdmin: true,

@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const { isAuthenticated, isSuperAdmin } = require('../users/controllers');
+const { isSuperAdmin, checkAuthStatus } = require('../users/controllers');
 const { getAdminRequests, approveRequest } = require('./controllers');
 
-router.get('/', isAuthenticated, isSuperAdmin, getAdminRequests);
-router.post('/approve', isAuthenticated, isSuperAdmin, approveRequest);
+router.get('/', checkAuthStatus, isSuperAdmin, getAdminRequests);
+router.post('/approve', checkAuthStatus, isSuperAdmin, approveRequest);
 
 module.exports = router;

@@ -29,7 +29,7 @@ exports.approveRequest = async (req, res, next) => {
       });
     }
 
-    user.approved = 1;
+    user.approved = true;
 
     await user.save();
 
