@@ -19,7 +19,23 @@ exports.getAdminRequests = async (req, res, next) => {
 
 exports.approveRequest = async (req, res, next) => {
   try {
-    // TODO
+    const { userId } = req.body;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        ok: false,
+        message: 'No such user exists',
+      });
+    }
+
+    user.approved = 1;
+
+    await user.save();
+
+    return res.json({
+      ok: true,
+    });
   } catch (err) {
     return next(err);
   }
