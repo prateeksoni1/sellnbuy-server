@@ -25,7 +25,7 @@ User.init(
       allowNull: false,
     },
     contact: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT(10),
     },
     userType: {
       type: DataTypes.ENUM('admin', 'user'),

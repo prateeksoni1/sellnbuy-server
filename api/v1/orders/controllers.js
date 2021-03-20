@@ -13,6 +13,8 @@ exports.getOrders = async (req, res) => {
 };
 
 exports.getOrdersForUser = async (req, res) => {
+  const { isPurchased } = req.query;
+
   const { user } = req;
   const cart = await Cart.findOne({
     where: {
@@ -28,11 +30,14 @@ exports.getOrdersForUser = async (req, res) => {
   const orders = await Orders.findAll({
     where: {
       cartId: cart.id,
-      isPurchased: false,
+      isPurchased,
     },
     include: [
       {
         model: Product,
+        include: {
+          model: User,
+        },
       },
     ],
   });

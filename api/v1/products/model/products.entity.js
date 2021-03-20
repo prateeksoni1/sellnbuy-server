@@ -23,10 +23,6 @@ Product.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    category: {
-      type: DataTypes.ENUM('a', 'b'),
-      allowNull: false,
-    },
     image: {
       type: DataTypes.STRING(255),
       allowNull: false,

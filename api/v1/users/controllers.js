@@ -96,16 +96,32 @@ exports.checkAuthStatus = async (req, res, next) => {
 
   req.user = await User.findByPk(data.id);
 
+  if (!req.user) {
+    return res.status(401).json({
+      ok: false,
+      message: 'Invalid token',
+    });
+  }
+
   return next();
 };
 
-exports.isAuthenticated = (req, res) => {
+exports.isAuthenticated = async (req, res) => {
   const { authorization } = req.headers; // Bearer token
   const token = authorization.split(' ')[1];
 
-  const isValid = jwt.verify(token, process.env.JWT_SECRET);
+  const data = jwt.verify(token, process.env.JWT_SECRET);
 
-  if (!isValid) {
+  if (!data) {
+    return res.status(401).json({
+      ok: false,
+      message: 'Invalid token',
+    });
+  }
+
+  const user = await User.findByPk(data.id);
+
+  if (!user) {
     return res.status(401).json({
       ok: false,
       message: 'Invalid token',
