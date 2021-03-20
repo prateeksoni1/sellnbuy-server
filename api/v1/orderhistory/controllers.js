@@ -13,17 +13,66 @@ exports.getOrderHistory = async (req, res) => {
 
 exports.getOrderHistoryForUser = async(req,res)=>{
   const {user} = req;
-  const cart = await Cart.findOne({
+  const cart = await Cart.findAll({
     where: {
       userId: user.id,
     },
   });
-
-  const order = await Orders.findOne({
+  console.log(cart);
+  if (!cart) {
+    return res.status(404).json({
+      ok: false,
+      message: 'No cart found for the user',
+    });
+  }
+  const orderHistory = await Orders.findAll({
     where: {
-      cartId = cart.id,
+      cartId : cart.id,
+      isPurchased: true
     },
+    include: [
+      {
+        model: Cart
+      },
+    ],
   });
+  if (!orderHistory) {
+    return res.status(404).json({
+      ok: false,
+      message: 'No order history found for the user',
+    });
+  }
+  
+  console.log(orderHistory);
+  
+  return res.status(200).json({
+    ok: true,
+    orderHistory,
+  });
+
+
+
   
   
 }
+exports.addMultipleOrderHistory = async (req, res) => {
+  const { orders } = req.body;
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < orders.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await OrderHistory.create({
+      orderId: orders[i],
+    });
+
+    // eslint-disable-next-line no-await-in-loop
+    const order = await Orders.findByPk(orders[i]);
+    order.isPurchased = true;
+    // eslint-disable-next-line no-await-in-loop
+    await order.save();
+  }
+
+  return res.status(201).json({
+    ok: true,
+  });
+};

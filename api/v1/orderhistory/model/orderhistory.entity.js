@@ -1,6 +1,6 @@
-const { Model, DataTypes } = require("sequelize");
-const db = require("../../../../db");
-const Order = require("../../orders/model/orders.entity");
+const { Model, DataTypes } = require('sequelize');
+const db = require('../../../../db');
+const Order = require('../../orders/model/orders.entity');
 class OrderHistory extends Model {}
 OrderHistory.init(
   {
@@ -17,8 +17,8 @@ OrderHistory.init(
   {
     sequelize: db,
     timestamps: true,
-  }
+  },
 );
-OrderHistory.belongsTo(Order, { foreignKey: "orderId" });
+OrderHistory.belongsTo(Order, { foreignKey: 'orderId' });
 
 module.exports = OrderHistory;

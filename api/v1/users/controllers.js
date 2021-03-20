@@ -131,21 +131,14 @@ exports.isAdmin = (req, res, next) => {
 };
 
 exports.isUser = (req, res, next) => {
-  try {
-    const { user } = req;
+  const { user } = req;
 
-    console.log(user);
-
-    if (user.userType === 'user') {
-      console.log('here');
-      return next();
-    }
-
-    return res.status(401).json({
-      ok: false,
-      message: 'Only user can access this route',
-    });
-  } catch (err) {
-    console.log(err);
+  if (user.userType === 'user') {
+    return next();
   }
+
+  return res.status(401).json({
+    ok: false,
+    message: 'Only user can access this route',
+  });
 };

@@ -18,12 +18,13 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
-  const { name, price, category, ownerId, image } = req.body;
+  const { user } = req;
+  const { name, price, category, image } = req.body;
 
   const product = await Product.create({
     name,
     price,
-    ownerId,
+    ownerId: user.id,
     category,
     image,
   });
