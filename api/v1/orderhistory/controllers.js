@@ -1,6 +1,8 @@
 const Cart = require('../cart/model/cart.entity');
 const Orders = require('../orders/model/orders.entity');
 const OrderHistory = require('./model/orderhistory.entity');
+const Product = require('../products/model/products.entity');
+const User = require('../users/model/users.entity');
 
 exports.getOrderHistory = async (req, res) => {
   const orderHistory = await OrderHistory.findAll();
@@ -11,9 +13,9 @@ exports.getOrderHistory = async (req, res) => {
   });
 };
 
-exports.getOrderHistoryForUser = async(req,res)=>{
-  const {user} = req;
-  const cart = await Cart.findAll({
+exports.getOrderHistoryForUser = async (req, res) => {
+  const { user } = req;
+  const cart = await Cart.findOne({
     where: {
       userId: user.id,
     },
@@ -25,36 +27,60 @@ exports.getOrderHistoryForUser = async(req,res)=>{
       message: 'No cart found for the user',
     });
   }
-  const orderHistory = await Orders.findAll({
+  const orders = await Orders.findAll({
     where: {
-      cartId : cart.id,
-      isPurchased: true
+      cartId: cart.id,
+      isPurchased: true,
     },
     include: [
       {
-        model: Cart
+        model: Product,
       },
     ],
   });
-  if (!orderHistory) {
+
+  if (!orders) {
     return res.status(404).json({
       ok: false,
       message: 'No order history found for the user',
     });
   }
-  
-  console.log(orderHistory);
-  
+  let orderHistories = [];
+  for (let i = 0; i < orders.length; i++) {
+    orderHistories = await OrderHistory.findAll({
+      where: {
+        orderId: orders[i].id,
+      },
+      include: [
+        {
+          model: Orders,
+          include: [
+            {
+              model: Product,
+              include: [
+                {
+                  model: User,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!orderHistories) {
+      return res.status(404).json({
+        ok: false,
+        message: 'No order history found for the user',
+      });
+    }
+    console.log(orderHistories);
+  }
   return res.status(200).json({
     ok: true,
-    orderHistory,
+    orderHistories,
   });
-
-
-
-  
-  
-}
+};
 exports.addMultipleOrderHistory = async (req, res) => {
   const { orders } = req.body;
 
