@@ -66,6 +66,7 @@ exports.login = async (req, res, next) => {
         ok: true,
         token,
         superAdmin: true,
+        role: 'superAdmin',
       });
     }
 
@@ -96,6 +97,7 @@ exports.login = async (req, res, next) => {
     return res.json({
       ok: true,
       token,
+      role: existingUser.userType,
     });
   } catch (err) {
     return next(err);
@@ -157,6 +159,7 @@ exports.isAuthenticated = async (req, res, next) => {
       return res.json({
         ok: true,
         superAdmin: true,
+        role: 'superAdmin',
       });
     }
 
@@ -171,6 +174,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
     return res.json({
       ok: true,
+      role: user.userType,
     });
   } catch (err) {
     return next(err);
