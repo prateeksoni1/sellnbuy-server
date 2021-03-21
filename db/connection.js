@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('osba', 'team3', 'password', {
-  host: 'localhost',
+const sequelize = new Sequelize('osba', 'root', 'root', {
   dialect: 'mysql',
+  host: 'db',
 });
 
 const connectDb = async () => {
@@ -11,13 +11,6 @@ const connectDb = async () => {
   console.info('DB connected');
 
   sequelize.sync();
-
-  // require('../api/v1/users/model/users.entity');
-  // require('../api/v1/cart/model/cart.entity');
-  // require('../api/v1/products/model/products.entity');
-  // require('../api/v1/orders/model/orders.entity');
-
-  // sequelize.sync({ force: true });
 };
 
 connectDb();
