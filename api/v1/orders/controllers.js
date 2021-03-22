@@ -110,3 +110,20 @@ exports.deleteOrder = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.checkoutMultipleOrders = async (req, res) => {
+  const { orders } = req.body;
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < orders.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    const order = await Orders.findByPk(orders[i]);
+    order.isPurchased = true;
+    // eslint-disable-next-line no-await-in-loop
+    await order.save();
+  }
+
+  return res.status(201).json({
+    ok: true,
+  });
+};

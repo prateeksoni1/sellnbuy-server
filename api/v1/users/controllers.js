@@ -146,9 +146,7 @@ exports.isAuthenticated = async (req, res, next) => {
     const { authorization } = req.headers; // Bearer token
 
     const token = authorization.split(' ')[1];
-    console.log(token);
     if (token === 'null' || token === undefined || token === '') {
-      console.log('here');
       return res.status(401).json({
         ok: false,
         message: 'Invalid token',
@@ -209,7 +207,7 @@ exports.isAdmin = (req, res, next) => {
   try {
     const { user } = req;
 
-    if (user.userType === 'admin') {
+    if (user.userType === 'admin' && user.approved) {
       next();
     }
 
