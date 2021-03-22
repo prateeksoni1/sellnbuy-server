@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('osba', 'root', 'root', {
+const sequelize = new Sequelize('osbd', 'root', 'root', {
   dialect: 'mysql',
-  host: 'db',
+  host: 'localhost',
 });
 
 const connectDb = async () => {
