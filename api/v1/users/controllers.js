@@ -1,6 +1,7 @@
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 const User = require('./model/users.entity');
+const Cart = require('../cart/model/cart.entity');
 
 exports.getUsers = async (req, res, next) => {
   try {
@@ -39,6 +40,10 @@ exports.register = async (req, res, next) => {
       email,
       password: hashedPassword,
       userType,
+    });
+
+    await Cart.create({
+      userId: user.id,
     });
 
     return res.status(201).json({
