@@ -4,6 +4,9 @@ const Product = require('./model/products.entity');
 exports.getProducts = async (req, res, next) => {
   try {
     const products = await Product.findAll({
+      where: {
+        isActive: true,
+      },
       include: [
         {
           model: User,
