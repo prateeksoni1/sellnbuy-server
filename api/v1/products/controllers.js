@@ -44,18 +44,11 @@ exports.addProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
+    const { productId } = req.params;
 
-    const order = await Orders.findByPk(orderId);
-
-    if (!order) {
-      return res.status(404).json({
-        ok: false,
-        message: "Order doesn't exist",
-      });
-    }
-
-    await order.destroy();
+    const product = await Product.findByPk(productId);
+    product.isActive = false;
+    await product.save();
 
     return res.status(200).json({
       ok: true,

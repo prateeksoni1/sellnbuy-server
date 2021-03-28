@@ -32,7 +32,7 @@ exports.getOrdersForUser = async (req, res, next) => {
         message: 'No cart found for the user',
       });
     }
-    const orders = await Orders.findAll({
+    let orders = await Orders.findAll({
       where: {
         cartId: cart.id,
         isPurchased,
@@ -46,6 +46,15 @@ exports.getOrdersForUser = async (req, res, next) => {
         },
       ],
     });
+
+    orders = orders.filter((order) => {
+      if (!order.isPurchased && !order.Product.isActive) {
+        return false;
+      }
+
+      return true;
+    });
+
     return res.status(200).json({
       ok: true,
       orders,
@@ -73,6 +82,12 @@ exports.addOrder = async (req, res, next) => {
     }
 
     const { productId } = req.body;
+
+    const product = await Product.findByPk(productId);
+
+    if (!product.isActive) {
+      throw new Error('Product does not exist');
+    }
 
     const order = await Orders.create({
       productId,

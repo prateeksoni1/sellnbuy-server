@@ -27,6 +27,11 @@ Product.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      required: true,
+      defaultValue: true,
+    },
   },
   {
     sequelize: db,
